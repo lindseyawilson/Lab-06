@@ -1,7 +1,7 @@
 ---
 title: "Lab 06 - Ugly charts and Simpson's paradox"
-author: "Insert your name here"
-date: "Insert date here"
+author: "Lindsey Wilson"
+date: "2/16/23"
 output: github_document
 ---
 
@@ -12,6 +12,45 @@ library(tidyverse)
 library(dsbox)
 library(mosaicData) 
 ```
+
+```{r load-data}
+staff <- read_csv("data/instructional-staff.csv")
+```
+### Instructional Staff Employment Trends
+
+Here's our code to take the data in `staff` and make it long:
+
+```{r staff-data-longer}
+staff_long <- staff %>%
+  pivot_longer(cols = -faculty_type, names_to = "year") %>%
+  mutate(value = as.numeric(value))
+
+staff_long
+```
+
+This allows us to plot our data as a line graph:
+
+```{r staff-data-line-graph}
+staff_long %>%
+  ggplot(aes(x = year, y = value, color = faculty_type)) +
+  geom_line()
+```
+
+However, when we run that code we get an error message. We can fix this by grouping by `faculty_type` in ggplot:
+
+```{r staff-data-line-graph-fixed}
+staff_long %>%
+  ggplot(aes(x = year,
+             y = value,
+             group = faculty_type,
+             color = faculty_type)) +
+  geom_line() + 
+  labs(title = "Hires by Faculty Type over Time",
+       x = "Year",
+       y = "Percentage")
+```
+
+If I wanted to show that the percentage of part-time faculty in particular has gone up, I would probably filter the data just to show that one group.
 
 ### Exercise 1
 
