@@ -52,6 +52,24 @@ staff_long %>%
 
 If I wanted to show that the percentage of part-time faculty in particular has gone up, I would probably filter the data just to show that one group.
 
+### Fisheries
+
+```{r read-fish-data}
+fisheries <- read_csv("data/fisheries.csv")
+```
+
+Let's try to plot this data in a way that isn't horrible:
+
+```{r fish-plot}
+ggplot(data = fisheries,
+       mapping = aes())
+
+
+
+
+```
+
+
 ### Exercise 1
 
 Remove this text, and add your answer for Exercise 1 here.
