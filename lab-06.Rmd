@@ -57,35 +57,103 @@ If I wanted to show that the percentage of part-time faculty in particular has g
 ```{r read-fish-data}
 fisheries <- read_csv("data/fisheries.csv")
 ```
+Here are the things I think are bad about the plot given in the lab, and what I think might fix them:
 
-Let's try to plot this data in a way that isn't horrible:
+1.) There's no legend in the line graph to distinguish capture and acquaculture. Adding a legend is an easy fix to this problem
+
+2.) China has such high fish production that it compresses the rest of the plot to the bottom. One way to fix this might be to graph the y-axis as the log of fish production;  production numbers span about an order of magnitude, so there's a chance this fixes the compression while still conveying information
+
+3.) I don't like that it's a line graph, because that implies change over time or progression along some scale. For example, Laos isn't "bigger" than Norway, but the plot makes it appear that way. Bar graphs may convey things more effectively
+
+
+Let's try to implement these changes:
 
 ```{r fish-plot}
-ggplot(data = fisheries,
-       mapping = aes(x = ))
+#restructure data to make it long
+fisheries_long <- fisheries %>%
+  pivot_longer(cols = -country,
+               names_to = "production_type")
+  
+fisheries_long %>%
+  filter(country %in% c("China", "Russia", "Norway", "Malaysia", "Spain", "Nigeria", "France", "Mauritania", "Nambia", "Ghana",  "Mozambique", "Poland", "Sierra Leone", "Laos", "Panama", "Seychelles", "Saudi Arabia"),
+         production_type %in% c("capture", "aquaculture")) %>%
+  ggplot(mapping = aes(fill = production_type,
+                       x = country,
+                       y = log10(value))) + 
+  geom_bar(position = "stack", stat = "identity") +
+  theme(axis.text = element_text(size = 4))
+```
+The text on the x-axis is a little small, but any larger and the labels start to overlap with each other. Otherwise, I was able to implement all the changes I suggested, which I'm happy with!
 
+### Exercises
 
+```{r load-whickham}
+whickham <- data(Whickham)
+```
 
+#### Exercise 1
+
+This data came from an observational study. The help file for the data says as much: "Data on age, smoking, and mortality from a one-in-six survey of the electoral roll in Whickham, a mixed urban and rural district near Newcastle upon Tyne, in the UK. The survey was conducted in 1972-1974 to study heart disease and thyroid disease. A follow-up on those in the survey was conducted twenty years later."
+
+#### Exercise 2
+
+There are 1314 observations in the dataset. Each observation represents an individual woman who took the Whickham survey.
+
+```{r whickham-nrows}
+Whickham %>%
+  nrow()
+```
+
+#### Exercise 3
+
+There are 3 variables in the data: 
+"Age" (an integer variable giving the age of the participant at the time of the first survery)
+"Smoker" (an integer variable describing whether or not the individual in question was a smoker)
+"Outcome" (an integer varibale describing whether the individual in question was dead or alive in the follow-up 20 years after the initial study)
+
+```{r columns}
+Whickham %>%
+  ncol()
+
+Whickham %>%
+  names()
+
+typeof(Whickham$age)
+typeof(Whickham$smoker)
+typeof(Whickham$outcome)
+```
+
+#### Exercise 4
+
+I would expect smokers to be more likely to be dead (and therefore less likely to be alive) at follow-up than nonsmokers
+
+#### Exercise 5
+
+Below is some code that gives us counts based on. whether or not people were smokers and whether or not they were alive at follow-up
+
+```{r smoking-counts}
+Whickham %>%
+  count(smoker, outcome)
+```
+
+Which allows us to calculate some conditional probabilities. Full disclosure, there's probably a smarter way to do this than to store each of the counts as a separate object, but it's not occurring to me right now so that's what we're going with:
+
+```{r conditional-probabilities}
+smoker = 443 + 139
+nonsmoker = 502 + 230
+alive = 502 + 443
+dead = 230 + 139
+
+nonsmoker_alive = 502
+nonsmoker_dead = 230
+smoker_alive = 443
+smoker_dead = 139
+
+message("The probability an individual was alive at follow-up given they were a smoker is ", smoker_alive/smoker)
+message("The probability an individual was dead at follow-up given they were a smoker is ", smoker_dead/smoker)
+message("The probability an individual was alive at follow-up given they were a nonsmoker is ", nonsmoker_alive/nonsmoker)
+message("The probability an individual was dead at follow-up given they were a nonsmoker is ", nonsmoker_dead/nonsmoker)
 
 ```
 
 
-### Exercise 1
-
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
-
-### Exercise 2
-
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
-
-### Exercise 3
-
-...
-
-Add exercise headings as needed.
