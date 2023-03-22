@@ -85,6 +85,30 @@ If I wanted to show that the percentage of part-time faculty in
 particular has gone up, I would probably filter the data just to show
 that one group.
 
+### Fisheries
+
+``` r
+fisheries <- read_csv("data/fisheries.csv")
+```
+
+    ## Rows: 216 Columns: 4
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (1): country
+    ## dbl (3): capture, aquaculture, total
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+Let’s try to plot this data in a way that isn’t horrible:
+
+``` r
+ggplot(data = fisheries,
+       mapping = aes(x = ))
+```
+
+![](lab-06_files/figure-gfm/fish-plot-1.png)<!-- -->
+
 ### Exercise 1
 
 Remove this text, and add your answer for Exercise 1 here. Add code

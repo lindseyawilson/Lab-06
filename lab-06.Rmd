@@ -62,7 +62,7 @@ Let's try to plot this data in a way that isn't horrible:
 
 ```{r fish-plot}
 ggplot(data = fisheries,
-       mapping = aes())
+       mapping = aes(x = ))
 
 
 
