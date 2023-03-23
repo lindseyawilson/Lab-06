@@ -221,8 +221,10 @@ Below is some code that gives us counts based on. whether or not people
 were smokers and whether or not they were alive at follow-up
 
 ``` r
-Whickham %>%
+Whickham_counts <- Whickham %>%
   count(smoker, outcome)
+
+Whickham_counts
 ```
 
     ##   smoker outcome   n
@@ -247,25 +249,40 @@ nonsmoker_dead = 230
 smoker_alive = 443
 smoker_dead = 139
 
-message("The probability an individual was alive at follow-up given they were a smoker is ", smoker_alive/smoker)
+cat("The probability an individual was alive at follow-up given they were a smoker is ", smoker_alive/smoker)
 ```
 
-    ## The probability an individual was alive at follow-up given they were a smoker is 0.761168384879725
+    ## The probability an individual was alive at follow-up given they were a smoker is  0.7611684
 
 ``` r
-message("The probability an individual was dead at follow-up given they were a smoker is ", smoker_dead/smoker)
+cat("The probability an individual was dead at follow-up given they were a smoker is ", smoker_dead/smoker)
 ```
 
-    ## The probability an individual was dead at follow-up given they were a smoker is 0.238831615120275
+    ## The probability an individual was dead at follow-up given they were a smoker is  0.2388316
 
 ``` r
-message("The probability an individual was alive at follow-up given they were a nonsmoker is ", nonsmoker_alive/nonsmoker)
+cat("The probability an individual was alive at follow-up given they were a nonsmoker is ", nonsmoker_alive/nonsmoker)
 ```
 
-    ## The probability an individual was alive at follow-up given they were a nonsmoker is 0.685792349726776
+    ## The probability an individual was alive at follow-up given they were a nonsmoker is  0.6857923
 
 ``` r
-message("The probability an individual was dead at follow-up given they were a nonsmoker is ", nonsmoker_dead/nonsmoker)
+cat("The probability an individual was dead at follow-up given they were a nonsmoker is ", nonsmoker_dead/nonsmoker)
 ```
 
-    ## The probability an individual was dead at follow-up given they were a nonsmoker is 0.314207650273224
+    ## The probability an individual was dead at follow-up given they were a nonsmoker is  0.3142077
+
+We can also use the `Whichham_counts` object we made earlier to try to
+visualize what’s going on here:
+
+``` r
+Whickham_counts %>%
+  ggplot(mapping = aes(x = smoker,
+                       y = n,
+                       fill = outcome)) + 
+  geom_bar(position = "dodge", stat = "identity")
+```
+
+![](lab-06_files/figure-gfm/smoking-counts-viz-1.png)<!-- -->
+
+#### Exercise 6

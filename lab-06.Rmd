@@ -132,8 +132,10 @@ I would expect smokers to be more likely to be dead (and therefore less likely t
 Below is some code that gives us counts based on. whether or not people were smokers and whether or not they were alive at follow-up
 
 ```{r smoking-counts}
-Whickham %>%
+Whickham_counts <- Whickham %>%
   count(smoker, outcome)
+
+Whickham_counts
 ```
 
 Which allows us to calculate some conditional probabilities. Full disclosure, there's probably a smarter way to do this than to store each of the counts as a separate object, but it's not occurring to me right now so that's what we're going with:
@@ -149,11 +151,24 @@ nonsmoker_dead = 230
 smoker_alive = 443
 smoker_dead = 139
 
-message("The probability an individual was alive at follow-up given they were a smoker is ", smoker_alive/smoker)
-message("The probability an individual was dead at follow-up given they were a smoker is ", smoker_dead/smoker)
-message("The probability an individual was alive at follow-up given they were a nonsmoker is ", nonsmoker_alive/nonsmoker)
-message("The probability an individual was dead at follow-up given they were a nonsmoker is ", nonsmoker_dead/nonsmoker)
+cat("The probability an individual was alive at follow-up given they were a smoker is ", smoker_alive/smoker)
+cat("The probability an individual was dead at follow-up given they were a smoker is ", smoker_dead/smoker)
+cat("The probability an individual was alive at follow-up given they were a nonsmoker is ", nonsmoker_alive/nonsmoker)
+cat("The probability an individual was dead at follow-up given they were a nonsmoker is ", nonsmoker_dead/nonsmoker)
 
 ```
+
+We can also use the `Whichham_counts` object we made earlier to try to visualize what's going on here:
+
+```{r smoking-counts-viz}
+Whickham_counts %>%
+  ggplot(mapping = aes(x = smoker,
+                       y = n,
+                       fill = outcome)) + 
+  geom_bar(position = "dodge", stat = "identity")
+```
+
+#### Exercise 6
+
 
 
