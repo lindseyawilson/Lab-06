@@ -286,3 +286,50 @@ Whickham_counts %>%
 ![](lab-06_files/figure-gfm/smoking-counts-viz-1.png)<!-- -->
 
 #### Exercise 6
+
+Let’s mutate the Whickham data to add age categories, and then recreate
+the above plot faceted by category:
+
+``` r
+Whickham <- Whickham %>% 
+  mutate(age_cat = case_when(age <= 44 ~ "18-44",
+                             age > 44 & age <= 64 ~ "45-64",
+                             age > 64 ~ "65+"))
+
+Whickham_counts_age <- Whickham %>%
+  count(smoker, age_cat, outcome)
+
+Whickham_counts_age %>%
+  ggplot(mapping = aes(x = smoker,
+                       y = n,
+                       fill = outcome)) + 
+  geom_bar(position = "dodge", stat = "identity") + 
+  facet_wrap(~age_cat)
+```
+
+![](lab-06_files/figure-gfm/Whickham-add-categories-1.png)<!-- -->
+
+``` r
+Whickham_counts_age
+```
+
+    ##    smoker age_cat outcome   n
+    ## 1      No   18-44   Alive 327
+    ## 2      No   18-44    Dead  12
+    ## 3      No   45-64   Alive 147
+    ## 4      No   45-64    Dead  53
+    ## 5      No     65+   Alive  28
+    ## 6      No     65+    Dead 165
+    ## 7     Yes   18-44   Alive 270
+    ## 8     Yes   18-44    Dead  15
+    ## 9     Yes   45-64   Alive 167
+    ## 10    Yes   45-64    Dead  80
+    ## 11    Yes     65+   Alive   6
+    ## 12    Yes     65+    Dead  44
+
+This allows us to see that the contingencies vary pretty strongly
+between groups. For younger people, almost everyone lives regardless of
+smoking, and for older individuals almost everyone dies regardless of
+smoking status. Age seems to be a much stronger predictor of whether
+someone is alive 20 years later than smoking status (which, when you put
+it that way, is kind of a no-brainer).
